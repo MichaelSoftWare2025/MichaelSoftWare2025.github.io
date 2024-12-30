@@ -61,10 +61,6 @@
       width: 30px;
       height: 20px;
     }
-
-    #pdf-viewer {
-      background-color: #0ce7dcef;
-    }
   </style>
 </head>
 <body id="body">
@@ -97,10 +93,6 @@
     let isEnglish = 1;
     let isChina = 0;
     let errorc = "Please open this file in SoftWare PDF Reader app";
-
-    if (window.location.protocol == "file:") {
-      document.body.innerHTML = errorc;
-    }
 
     // Функция для отображения страницы
     function renderPage(pageNum) {
