@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PDF Viewer</title>
+  <link rel="shortcut icon" href="icon.png" type="image/x-icon">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100%;
+      background-color: #0ce7dcef;
+      overflow: hidden;
+    }
+
+    #pdf-viewer {
+      width: 100%;
+      max-width: 1000px;
+      height: 100vh;
+      overflow-y: auto;
+      overflow-x: auto;
+      background-color: #0ce7dcef; 
+      padding: 10px;
+      border: 1px solid #ccc;
+    }
+
+    input[type="file"] {
+      margin: 20px;
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    #controls {
+      margin-top: 20px;
+      text-align: center;
+    }
+
+    #language-switch {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .language-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+    }
+
+    .language-btn img {
+      width: 30px;
+      height: 20px;
+    }
+
+    #pdf-viewer {
+      background-color: #0ce7dcef;
+    }
+  </style>
+</head>
+<body id="body">
+  <div class="subhead">
+    <h1 id="title" style="text-align: center;">PDF Viewer</h1>
+    <input type="file" id="file-input" accept="application/pdf" />
+    <div id="pdf-viewer"></div>
+  </div>
+
+  <!-- Language Switcher -->
+  <div id="language-switch">
+    <button class="language-btn" id="language-btn">
+      <img src="Flag_of_the_United_States.svg" alt="English" />
+    </button>
+  </div>
+
+
+  <script src="pdf.min.js"></script> <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.min.js"</script>-->
+  <script src="pdf.worker.min.js"></script>
+
+  <script>
+    const fileInput = document.getElementById('file-input');
+    const title = document.getElementById('title');
+    const pdfViewer = document.getElementById('pdf-viewer');
+    const languageBtn = document.getElementById('language-btn');
+
+    var err = "Error has been detected and pdf reading are shutdown to prevent damage to your files. Please re read file or restart computer error code: ";
+
+    let pdfDoc = null;
+    let isEnglish = 1;
+    let isChina = 0;
+    let errorc = "Please open this file in SoftWare PDF Reader app";
+
+    if (window.location.protocol == "file:") {
+      document.body.innerHTML = errorc;
+    }
+
+    // Функция для отображения страницы
+    function renderPage(pageNum) {
+      pdfDoc.getPage(pageNum).then(function(page) {
+        const scale = 1.5;
+        const viewport = page.getViewport({ scale: scale });
+
+        // Создаем канвас для рендеринга страницы
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = viewport.width;
+        canvas.height = viewport.height;
+
+        // Добавляем канвас в контейнер pdf-viewer
+        pdfViewer.appendChild(canvas);
+
+        page.render({
+          canvasContext: ctx,
+          viewport: viewport
+        });
+      });
+    }
+
+    // Загрузка PDF-файла
+    function loadPDF(file) {
+      const reader = new FileReader();
+      reader.onload = function() {
+        const typedarray = new Uint8Array(this.result);
+
+        pdfjsLib.getDocument(typedarray).promise.then(function(pdf) {
+          pdfDoc = pdf;
+          pdfViewer.innerHTML = ''; // Очищаем контейнер перед рендерингом
+
+          // Рендерим все страницы
+          for (let i = 1; i <= pdfDoc.numPages; i++) {
+            renderPage(i);
+          }
+        }).catch(function(error) {
+          pdfViewer.innerHTML = `${err}` + error;
+        });
+      };
+
+      reader.readAsArrayBuffer(file);
+    }
+
+    // Обработчик для выбора файла
+    fileInput.addEventListener('change', function(event) {
+      const file = event.target.files[0];
+      if (file) {
+        loadPDF(file);
+      }
+    });
+
+    // Переключение на английский язык
+    function setEnglish() {
+      errorc = "Please open this file in SoftWare PDF Reader app.";
+      isEnglish = 1;
+      title.innerText = "PDF Viewer";
+      fileInput.setAttribute('placeholder', 'Select a PDF file');
+      languageBtn.innerHTML = `<img src="Flag_of_Russia.svg" alt="Русский" />`;
+      err = "Error has been detected and pdf reading are shutdown to prevent damage to your files. Please re read file or restart computer error code: ";
+    }
+
+    // Переключение на русский язык
+    function setRussian() {
+      errorc = "Откройте этот файл в приложении SoftWare PDF Reader.";
+      isEnglish = 0;
+      title.innerText = "Просмотр PDF";
+      fileInput.setAttribute('placeholder', 'Выберите файл PDF');
+      languageBtn.innerHTML = `<img src="Flag_of_the_People%27s_Republic_of_China.svg" alt="China" />`;
+      err = "Ошибка обнаружена и чтение PDF остановлено, чтобы предотвратить повреждение ваших файлов. Пожалуйста, перечитайте файл или перезагрузите компьютер код ошибки: ";
+    }
+
+    function setChina() {
+      errorc = "請在 Software PDF Reader 應用程式中開啟此文件.";
+      isEnglish = 0;
+      isChina = 1;
+      title.innerText = "PDF檢視器";
+      fileInput.setAttribute('placeholder', '選擇PDF文件');
+      languageBtn.innerHTML = `<img src="Flag_of_the_United_States.svg" alt="English" />`;
+      err = "偵測到錯誤，PDF 閱讀已停止，以防止損壞您的檔案。請重新閱讀該檔案或重新啟動電腦錯誤代碼：";
+    }
+
+    const LANGUAGE = {
+      ENGLISH: 1,
+      RUSSIAN: 2,
+      CHINESE: 0
+    };
+
+    var currentLanguage = LANGUAGE.ENGLISH;
+    
+    languageBtn.addEventListener('click', function() {
+      if (currentLanguage === LANGUAGE.ENGLISH) {
+        setRussian();
+        currentLanguage = LANGUAGE.RUSSIAN;
+      } else if (currentLanguage === LANGUAGE.RUSSIAN) {
+        setChina();
+        currentLanguage = LANGUAGE.CHINESE;
+      } else {
+        setEnglish();
+        currentLanguage = LANGUAGE.ENGLISH;
+      }
+    });    
+    // Изначально английский
+    setEnglish();
+  </script>
+</body>
+</html>
