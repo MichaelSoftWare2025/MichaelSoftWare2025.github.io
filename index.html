@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Captcha Verification</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://js.hcaptcha.com/1/api.js" async defer></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Please complete the hCaptcha to proceed</h1>
+        
+        <form id="captcha-form" action="/home">
+            <div class="h-captcha" data-sitekey="54e048da-4c20-4e36-a884-a1c80c3abbaa" data-callback="hcaptchaCallback"></div>
+            <br>
+            <input type="submit" value="Verify" disabled id="submitButton">
+        </form>
+        
+        <p id="error-message" style="color: red; display: none;">Captcha incorrect, please try again.</p>
+    </div>
+
+    <script>
+        // Функция обратного вызова для hCaptcha, которая активирует кнопку отправки
+        function hcaptchaCallback(response) {
+            if (response) {
+                // Если капча пройдена, активировать кнопку отправки
+                document.getElementById("submitButton").disabled = false;
+            } else {
+                // Если капча не пройдена, оставить кнопку заблокированной
+                document.getElementById("submitButton").disabled = true;
+            }
+        }
+
+        // Валидация формы на клиенте перед отправкой
+        $('#captcha-form').on('submit', function(event) {
+            // Проверяем, если капча не решена, форма не отправляется
+            var hcaptchaResponse = grecaptcha.getResponse();
+            if (!hcaptchaResponse) {
+                event.preventDefault();
+                $('#error-message').show();
+                alert("You must complete the captcha to proceed.");
+            } else {
+                // Если капча пройдена, продолжить отправку формы
+                $('#error-message').hide();
+            }
+        });
+    </script>
+</body>
+</html>
