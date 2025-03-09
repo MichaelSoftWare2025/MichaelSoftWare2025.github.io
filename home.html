@@ -5,10 +5,51 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Michael</title>
     <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/pyodide/v0.27.3/full/pyodide.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        function download() {
+            var version = $("#version").val()
+            window.location.href = `/download.html?v={version}`
+        }
+    </script>
 </head>
 <body>
     <h1>Hello everyone!</h1>
     
+    <h2 class="t">PWManager</h2>
+    <div class="pwm">
+        <h3><a href="https://github.com/MichaelSoftWare2025/PWManager">Github repository</a></h3>
+        <h3>Download</h3>
+        <label for="version">Version</label>
+        <input type="text" class="version" id="version">
+        <button id="downb" onclick="download()">Download version</button>
+    </div>
+    <script>
+        function animateTitles() {
+            var titleElements = document.getElementsByClassName("t"); // Получаем все элементы с классом "t"
+            var growing = true;
+            var size = 15; // Начальный размер шрифта
+    
+            setInterval(() => {
+                if (growing) {
+                    size += 1;
+                    if (size >= 25) growing = false; // Максимальный размер
+                } else {
+                    size -= 1;
+                    if (size <= 15) growing = true; // Минимальный размер
+                }
+    
+                // Меняем размер у всех элементов с классом "t"
+                Array.from(titleElements).forEach((element) => {
+                    element.style.fontSize = size + "px";
+                });
+    
+            }, 100); // Интервал анимации
+        }
+    
+        window.onload = animateTitles;
+    </script>
     
 </body>
 </html>

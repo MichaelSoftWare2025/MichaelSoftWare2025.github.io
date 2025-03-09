@@ -1,0 +1,16 @@
+<script>
+    // Получаем параметры из URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const version = urlParams.get("v");
+
+    if (version) {
+        // Формируем ссылку на файл
+        const filename = `pwmanager-${version}.exe`;
+        const fileUrl = `/downloads/${filename}`; // Укажите правильный путь к файлам
+
+        // Автоматически перенаправляем на скачивание
+        window.location.href = fileUrl;
+    } else {
+        alert("Ошибка: версия не указана!");
+    }
+</script>
