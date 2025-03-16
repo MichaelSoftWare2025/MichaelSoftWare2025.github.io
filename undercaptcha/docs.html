@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UnCaptcha Documentation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            line-height: 1.6;
+            max-width: 800px;
+            margin: auto;
+        }
+        h1, h2, h3 {
+            color: #333;
+        }
+        code {
+            background: #f4f4f4;
+            padding: 3px 6px;
+            border-radius: 4px;
+        }
+        pre {
+            background: #f4f4f4;
+            padding: 10px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        .container {
+            padding: 20px;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>UnCaptcha.js Documentation</h1>
+        <p><strong>UnCaptcha.js</strong> - это лёгкий скрипт для создания и проверки текстовой капчи.</p>
+        
+        <h2>1. Подключение</h2>
+        <p>Добавьте следующий код в ваш HTML-файл:</p>
+        <pre><code>&lt;script src="https://github.com/MichaelSoftWare2025/MichaelSoftWare2025.github.io/undercaptcha/uncaptcha.min.js"&gt;&lt;/script&gt;</code></pre>
+        
+        <h2>2. Использование</h2>
+        <p>Просто добавьте следующий HTML-код на вашу страницу:</p>
+        <pre><code>&lt;div class="uncaptcha" url="https://example.com"&gt;&lt;/div&gt;</code></pre>
+        <p><strong>Атрибут <code>url</code></strong> указывает, куда будет перенаправлен пользователь после успешного ввода капчи.</p>
+        
+        <h2>3. Как это работает?</h2>
+        <p>После загрузки страницы UnCaptcha.js автоматически:</p>
+        <ul>
+            <li>Находит все элементы <code>div.uncaptcha</code>.</li>
+            <li>Генерирует случайный текст капчи.</li>
+            <li>Рисует капчу с небольшими наклонами символов.</li>
+            <li>Добавляет поле ввода и кнопку подтверждения.</li>
+        </ul>
+        
+        <h2>4. Функции</h2>
+        <ul>
+            <li><code>generateCaptcha()</code> - создаёт случайную строку капчи.</li>
+            <li><code>generateCaptchaImage(text)</code> - рендерит изображение капчи на основе текста.</li>
+            <li><code>createCaptchaElement(container)</code> - создаёт капчу внутри переданного элемента.</li>
+        </ul>
+        
+        <h2>5. Обратная связь</h2>
+        <p>Если у вас есть вопросы или предложения, свяжитесь с нами.</p>
+    </div>
+</body>
+</html>

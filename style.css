@@ -5,3 +5,24 @@ body {
     justify-content: center;
     justify-items: center;
 }
+.splash-container {
+    display: flex;
+    align-items: center; /* Выравниваем по вертикали */
+    gap: 10px; /* Расстояние между h1 и сплэш-текстом */
+    justify-content: center; /* Центрируем */
+    position: relative;
+}
+
+.splash {
+    font-size: 20px;
+    font-weight: bold;
+    color: yellow;
+    position: absolute;
+    transform: rotate(5deg);
+    animation: splashMove 3s infinite alternate ease-in-out;
+}
+
+@keyframes splashMove {
+    0% { transform: rotate(5deg) translateX(0px); }
+    100% { transform: rotate(-5deg) translateX(10px); }
+}
