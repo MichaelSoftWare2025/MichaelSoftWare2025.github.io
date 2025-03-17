@@ -7,12 +7,6 @@
     <link rel="stylesheet" href="style.css">
     <script src="https://cdn.jsdelivr.net/pyodide/v0.27.3/full/pyodide.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script>
-        function download() {
-            var version = $("#version").val()
-            window.location.href = `/download.html?v={version}`
-        }
-    </script>
 </head>
 <body>
     <h1>Hello everyone!</h1>
@@ -42,6 +36,25 @@
                 });
     
             }, 100); // Интервал анимации
+        }
+
+        class PythoncodeExecutor {
+            constructor() {
+                this.pyodide = null;
+            }
+
+            async init() {
+                this.pyodide = await loadPyodide();
+                await this.pyodide.loadPackage("micropip");
+            }
+
+            async execute(code) {
+                await this.pyodide.runPythonAsync(code);
+            }
+
+            async executeAsync(code) {
+                await this.pyodide.runPythonAsync(code);
+            }
         }
     
         window.onload = animateTitles;
